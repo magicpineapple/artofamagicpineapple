@@ -1,0 +1,114 @@
+/*VARIABLES*/
+
+:root {
+	/*TOP MENU MARGINS*/
+    --sideMargin: 60px;
+    --topMargin: 30px;
+}
+
+/*MENU*/
+
+#menuBar {
+    /* Background color turn black on grid */
+    position: fixed;
+    z-index: 5;
+    /* background-color: black; */
+    width: 100%;
+    height: 100px;
+    top: 0;
+    left: 0;
+}
+
+#menuBarContent {
+    position: absolute;
+    height: 100%;
+    text-align: center;
+    width: calc(100% - 2 * var(--sideMargin));
+    margin: var(--topMargin) var(--sideMargin) var(--topMargin) var(--sideMargin);
+}
+
+#menuLogoDiv {
+    position: absolute;
+}
+
+#menuLogo {
+    height: 110px;
+    width: auto;
+}
+
+#menuTitle {
+    position: absolute;
+    margin-top: 30px;
+    margin-left: 120px;
+    text-decoration: none;
+    font-size: 2.8em;
+}
+
+#menuButtonBar {
+    height: 100%;
+    text-align: center;
+    position: absolute;
+    right: 0px;
+}
+
+.menuButtonDiv {
+    display: inline-block;
+    height: 100%;
+    width: auto;
+    text-align: center;
+    margin-left: 60px;
+}
+
+.menuButtonText {
+    color: black;
+    margin-top: 55px;
+    font-size: 18px;
+}
+
+/*MOBILE MENU*/
+
+#mobileMenuButtonDiv, #mobileExitButtonDiv {
+    position: absolute;
+    right: 0px;
+    z-index: 0;
+    margin-top: 45px;
+}
+
+#mobileMenuButton, #mobileExitButton {
+    height: 35px;
+}
+
+#mobileMenuButtonDiv{
+    display: none;
+}
+
+#mobileMenu {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index: 10;
+    display: none;
+}
+
+#mobileMenuContent {
+    position: absolute;
+    height: 100%;
+    text-align: center;
+    width: calc(100% - 2 * var(--sideMargin));
+    margin: var(--topMargin) var(--sideMargin) var(--topMargin) var(--sideMargin);
+}
+
+.mobileMenuButtonDiv{
+    text-align: left;
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+#mobileMenuCol{
+    margin-top: 80px;
+}
+
+.mobileMenuButtonText {
+    color: black;
+}

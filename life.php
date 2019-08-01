@@ -12,13 +12,7 @@ $page->template->renderTop();
 	<div class="container">
 		<div id="art-gallery" class="gallery">
 
-			<?php
-			$files = scandir('images/art');
-			foreach ($files as $file) {
-				//do your work here
-				echo($file);
-			}
-			?>
+			<div class="gallery-unit-div"><img class="gallery-unit" src='images/photoshop art/what-we-build-SMALL.jpg' /></div>
 
 		</div>
 	</div>
