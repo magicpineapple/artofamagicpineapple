@@ -4,8 +4,7 @@
 <head>
     <!-- FONTS -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-    <!-- FAVICON -->
-    <link rel="icon" type="img/ico" href="/images/logoBlackFilled.png">
+    <!-- TITLE -->
     <title>Art of a Magic Pineapple</title>
     <!-- CSS -->
     <link rel="stylesheet" href="/css/main.css">
