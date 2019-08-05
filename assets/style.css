@@ -1,0 +1,62 @@
+/* Variables */
+:root {
+    --graphColWidth: 33%;
+    --colPadding: 50px;
+    --generalTextColor: #a4a4a4;
+}
+
+/* General */
+
+body {}
+
+.col {
+    position: absolute;
+    height: 100%;
+    display: inline;
+    text-align: center;
+}
+
+.colContent{
+    margin: var(--colPadding);
+    height: calc(100% - 2 * var(--colPadding));
+}
+
+#col1 {
+    width: var(--graphColWidth);
+    background-color: white;
+}
+
+#col2 {
+    left: var(--graphColWidth);
+    width: calc(100% - var(--graphColWidth));
+    background-color: #f4f4f4;
+}
+
+#graph {}
+
+#imgDisplay{
+    max-height: 80vh;
+    max-width: 100%;
+}
+
+/* Fonts */
+
+h1 {
+    font-family: 'Lato', sans-serif;
+    font-size: 3em;
+    font-weight: lighter;
+}
+
+h2 {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.2em;
+    font-weight: lighter;
+    color: var(--generalTextColor);
+}
+
+h3{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+    font-weight: lighter;
+    color: var(--generalTextColor);
+}
