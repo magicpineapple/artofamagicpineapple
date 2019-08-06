@@ -228,9 +228,12 @@ for i in range(size):
 
 graphData = getImageListData(imageList)
 
-fig = go.Figure(data=graphData)
+fig = go.Figure(
+    data=graphData
+)
 
 fig.update_layout(
+    height = 300,
     showlegend = False,
     barmode='stack', 
     bargap = 0, 
@@ -288,9 +291,9 @@ app.layout = html.Div([
                 className = "colContent",
                 children=[
                     
-                    html.H1('art of a magic pineapple'),
+                    html.H1('colors of a magic pineapple'),
                     
-                    html.H2('storytelling through digital art'),
+                    html.H2('hover over me to explore art | color palettes extracted and visualized with Python Machine Learning and Plotly'),
 
                     dcc.Graph(
                         id='graph',
