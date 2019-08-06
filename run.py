@@ -22,12 +22,12 @@ from PIL import Image
 from collections import Counter
 from sklearn.cluster import KMeans
 
-print('Sup')
-
 # Important variables
 imageList = []
-# Number of cols to display (CHANGE)
+# Number of graph cols to display (CHANGE)
 size = 10
+# Num colors to display (CHANGE)
+numColors = 5
 # Display bar width
 barWidth=1
 # Image director path
@@ -36,11 +36,11 @@ imgType = '.jpg'
 
 # CLASS: images
 class ImageObject:
-  def __init__(self, index, filepath, name, color, hue, hueScore, width, height):
+  def __init__(self, index, filepath, name, colors, hue, hueScore, width, height):
     self.index = index
     self.filepath = filepath
     self.name = name
-    self.color = color
+    self.colors = colors
     self.hue = hue
     self.hueScore = hueScore
     self.width = width
@@ -82,8 +82,8 @@ def getImageListData(imageList):
             width=barWidth, 
             x=sizeArray, 
             y=tempY, 
-            marker_color=image.color, 
-            text = image.name + " " + image.color, 
+            marker_color=image.colors[0], 
+            text = image.name + " " + image.colors[0], 
             hoverinfo="text",
         )
         graphData.append(tempData)
@@ -104,7 +104,7 @@ def storeAsJson(dataList):
             'index': data.index,
             'filepath': data.filepath,
             'name': data.name,
-            'color': data.color,
+            'colors': data.colors,
             'hue': data.hue,
             'hueScore': data.hueScore,
             'width': data.width,
@@ -146,7 +146,7 @@ for filepath in glob.iglob(imgDirectory+'*' + imgType):
     HEIGHT = 128
     index = index + 1
     # Number colors to extract (CHANGE)
-    CLUSTERS = 1
+    CLUSTERS = numColors
 
     # Open image with Pillow, use orig PATH var
     image = Image.open(filepath)
@@ -178,20 +178,19 @@ for filepath in glob.iglob(imgDirectory+'*' + imgType):
     label_counts = Counter(labels)
     total_count = sum(label_counts.values())
 
+    # All hex colors
     hex_colors = [
         rgb2hex(center) for center in model.cluster_centers_
     ]
 
     list(zip(hex_colors, list(label_counts.values())))
 
-    # Just need first hex color
-    hex_color = hex_colors[0]
     rgb_color = model.cluster_centers_[0]
     hue = getHue(rgb_color)
     hueScore = getHueScore(hue)
 
     # Create image object, add to list
-    tempImageObject = ImageObject(index, getNewFilepath(filepath), getImgName(getNewFilepath(filepath)), hex_color, hue, hueScore, new_width, new_height)
+    tempImageObject = ImageObject(index, getNewFilepath(filepath), getImgName(getNewFilepath(filepath)), hex_colors, hue, hueScore, new_width, new_height)
     imageList.append(tempImageObject)
 
     # Visualize results
@@ -213,7 +212,7 @@ for image in imageList:
     print(image.index)
     print(image.filepath)
     print(image.name)
-    print(image.color)
+    print(image.colors)
     print(image.hue)
     print(image.hueScore)
     print(image.width)
@@ -230,8 +229,7 @@ for i in range(size):
 graphData = getImageListData(imageList)
 
 fig = go.Figure(data=graphData)
-fig.update_xaxes(dtick=barWidth, showticklabels=False, gridcolor="white")
-fig.update_yaxes(dtick=barWidth, showticklabels=False, gridcolor="white")
+
 fig.update_layout(
     showlegend = False,
     barmode='stack', 
@@ -241,14 +239,26 @@ fig.update_layout(
         l=0,
         r=0,
         b=0,
-        t=0,
-        pad=0
+        t=0
     ),
     # Keep tick distance same to maintain image ratio
     yaxis = dict(
       scaleanchor = "x",
       scaleratio = 1,
     )
+)
+
+fig.update_xaxes(
+    dtick=barWidth, 
+    showticklabels=False, 
+    gridcolor="white"
+)
+
+fig.update_yaxes(
+    dtick=barWidth, 
+    showticklabels=False, 
+    gridcolor="white", 
+    tick0 = 0
 )
 
 # External CSS
@@ -295,13 +305,18 @@ app.layout = html.Div([
     html.Div(
         id="col2",
         className="col",
+        style = {
+            'background-color' : imageList[0].colors[0]
+        },
+
         children=[
             html.Div(
                 className = "colContent",
-            
+    
                 children=[
                     html.Img(
                         id="imgDisplay",
+                        src=imageList[0].filepath
                     ),
                     html.H3(
                         id="imgCaption"
@@ -312,12 +327,12 @@ app.layout = html.Div([
     )
 ])
 
-###################### Hover gallery stuff 
-
+###################### GRAPH INTERACTION
 # Update image
 @app.callback(dash.dependencies.Output('imgDisplay', 'src'), # CHANGE THIS
-              [dash.dependencies.Input('graph', 'hoverData')])
-def updateImg(hoverData):
+              [dash.dependencies.Input('graph', 'hoverData'),
+              dash.dependencies.Input('graph', 'clickData')])
+def updateImg(hoverData, clickData):
     index = hoverData['points'][0]['curveNumber']
     image = imageList[index]
     filepath = image.filepath
@@ -326,13 +341,14 @@ def updateImg(hoverData):
 
 # Update background color
 @app.callback(dash.dependencies.Output('col2', 'style'), # CHANGE THIS
-              [dash.dependencies.Input('graph', 'hoverData')])
-def updateImgBackground(hoverData):
+              [dash.dependencies.Input('graph', 'hoverData'),
+              dash.dependencies.Input('graph', 'clickData')])
+def updateImgBackground(hoverData, clickData):
     index = hoverData['points'][0]['curveNumber']
     image = imageList[index]
-    color = image.color
+    mainColor = image.colors[0]
     return {
-        'background-color': color
+        'background-color': mainColor
     }
 
 if __name__ == '__main__':

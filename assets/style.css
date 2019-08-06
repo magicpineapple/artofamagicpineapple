@@ -6,9 +6,6 @@
 }
 
 /* General */
-
-body {}
-
 .col {
     position: absolute;
     height: 100%;
@@ -16,7 +13,7 @@ body {}
     text-align: center;
 }
 
-.colContent{
+.colContent {
     margin: var(--colPadding);
     height: calc(100% - 2 * var(--colPadding));
 }
@@ -34,9 +31,10 @@ body {}
 
 #graph {}
 
-#imgDisplay{
-    max-height: 80vh;
-    max-width: 100%;
+#imgDisplay {
+    max-height: 100%;
+    max-width: 100%; 
+    margin: auto;
 }
 
 /* Fonts */
@@ -54,7 +52,7 @@ h2 {
     color: var(--generalTextColor);
 }
 
-h3{
+h3 {
     font-family: 'Montserrat', sans-serif;
     font-size: 1em;
     font-weight: lighter;

@@ -1,0 +1,25 @@
+/* Variables */
+:root {
+    --graphColHeight: 33%;
+}
+
+/* If screen portrait, stack divs vertically */
+@media screen and (orientation:portrait) {
+    .col {
+        display: block !important;
+    }
+
+    #col1 {
+        width: 100% !important;
+        height: var(--graphColHeight);
+        background-color: white;
+    }
+
+    #col2 {
+        width: 100% !important;
+        top: var(--graphColWidth);
+        left: 0 !important;
+        height: calc(100% - var(--graphColHeight));
+        background-color: #f4f4f4;
+    }
+}
