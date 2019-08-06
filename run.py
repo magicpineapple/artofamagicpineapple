@@ -293,7 +293,7 @@ app.layout = html.Div([
                     
                     html.H1('colors of a magic pineapple'),
                     
-                    html.H2('hover over me to explore art | color palettes extracted and visualized with Python Machine Learning and Plotly'),
+                    html.H2('hover over graph to explore art | color palettes extracted and visualized with Python Machine Learning and Plotly'),
 
                     dcc.Graph(
                         id='graph',
