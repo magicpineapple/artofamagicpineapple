@@ -1,7 +1,6 @@
 # Import weird hover stuff
 import json
 from textwrap import dedent as d
-import json
 from dash.dependencies import Input, Output
 
 # Import viz stuff
@@ -94,24 +93,6 @@ def getScaledSize(width, height, barWidth):
     scaledHeight = (height / width) * barWidth
     scaledSize = [barWidth, scaledHeight]
     return scaledSize
-
-# FUNCTION: store data as JSON
-def storeAsJson(dataList):
-    jsonData = {}
-    jsonData['imageData'] = []
-    for data in dataList:
-        jsonData['imageData'].append({
-            'index': data.index,
-            'filepath': data.filepath,
-            'name': data.name,
-            'colors': data.colors,
-            'hue': data.hue,
-            'hueScore': data.hueScore,
-            'width': data.width,
-            'height': data.height
-        })
-    with open('assets/data.json', 'w') as outfile:
-        json.dump(jsonData, outfile)
 
 # FUNCTION: replace \ in PATH with /
 def getNewFilepath(oldfilepath):
@@ -220,10 +201,7 @@ for filepath in glob.iglob(imgDirectory+'*' + imgType):
     # plt.axis('equal')
     # plt.show()
 
-# Create, store data in JSON file
-storeAsJson(imageList)
-
-# Print imageList
+""" # Print imageList
 for image in imageList:
     print(image.index)
     print(image.filepath)
@@ -233,7 +211,7 @@ for image in imageList:
     print(image.hueScore)
     print(image.width)
     print(image.height)
-    print()
+    print() """
 
 ################################################ CREATE GRAPH
 
