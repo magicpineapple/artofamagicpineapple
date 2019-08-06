@@ -1,6 +1,8 @@
 /* Variables */
 :root {
-    --graphColHeight: 33%;
+    --portraitGraphColHeight: 33%;
+    --portraitPaletteDivHeight: 60px;
+    --portraitGraphWidth: 300px;
 }
 
 /* If screen portrait, stack divs vertically */
@@ -11,15 +13,50 @@
 
     #col1 {
         width: 100% !important;
-        height: var(--graphColHeight);
+        height: var(--portraitGraphColHeight);
         background-color: white;
+        text-align: left;
     }
 
     #col2 {
         width: 100% !important;
         top: var(--graphColWidth);
         left: 0 !important;
-        height: calc(100% - var(--graphColHeight));
+        height: calc(100% - var(--portraitGraphColHeight));
         background-color: #f4f4f4;
+    }
+
+    #col1 div div {
+        display: table-row;
+    }
+
+    #col1Header {
+    }
+
+    #col1Header h1, h2{
+        width: calc(100% - var(--portraitGraphWidth));
+    }
+
+    /* GRAPH */
+
+    .svg-container {
+        width: var(--portraitGraphWidth) !important;
+    }
+
+    #graphDiv{
+        margin-left: calc(100% - var(--portraitGraphWidth));
+    }
+
+    /* FONTS */
+    h1{
+        font-size: 2.5em;
+    }
+
+    h2{
+        font-size: 1em;
+    }
+
+    h3{
+        font-size: 1.8em;
     }
 }

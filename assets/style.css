@@ -3,6 +3,7 @@
     --graphColWidth: 33%;
     --colPadding: 50px;
     --generalTextColor: #a4a4a4;
+    --paletteDivHeight: 60px;
 }
 
 /* General */
@@ -15,7 +16,7 @@
 
 .colContent {
     margin: var(--colPadding);
-    height: calc(100% - 2 * var(--colPadding));
+    height: calc(100% - 2 * var(--colPadding) - var(--paletteDivHeight));
 }
 
 #col1 {
@@ -29,6 +30,10 @@
     background-color: #f4f4f4;
 }
 
+#col2 .colContent {
+    margin-top: calc(var(--colPadding) + var(--paletteDivHeight));
+}
+
 #graph {}
 
 #imgDisplay {
@@ -37,8 +42,17 @@
     margin: auto;
 }
 
-/* Fonts */
+/* Colors Bar */
+#paletteDiv{
+    position: absolute;
+    width: 100%;
+    height: var(--paletteDivHeight);
+    background-color: rgb(7, 202, 202);
+}
 
+/* Color div styling in run.py */ 
+
+/* Fonts */
 h1 {
     font-family: 'Lato', sans-serif;
     font-size: 3em;

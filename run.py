@@ -136,6 +136,22 @@ def getImgName(filepath):
             nameList[i] = letter
     return "".join(nameList)
 
+
+# FUNCTION: create Dash div array for palette 
+def createPaletteDivs(index, colorsList):
+    divs = []
+    for i in range(len(colorsList)):
+        colorDiv = html.Div(
+            style = {
+                'background-color' : colorsList[i], 
+                'width' : 'calc(100% / ' + str(len(colorsList)) + ')',
+                'height' : '100%',
+                'display' : 'inline-flex'
+            }   
+        )
+        divs.append(colorDiv)
+    return divs
+
 # Assign index var to each image, use to match Dash block to image
 index = -1
 
@@ -291,14 +307,24 @@ app.layout = html.Div([
                 className = "colContent",
                 children=[
                     
-                    html.H1('colors of a magic pineapple'),
+                    html.Div(
+                        id="col1Header",
+                        children=[
+                            html.H1('colors of a magic pineapple'),
                     
-                    html.H2('hover over graph to explore art | color palettes extracted and visualized with Python Machine Learning and Plotly'),
+                            html.H2('hover over graph to explore art | color palettes extracted and visualized with python machine learning and plotly'),
+                        ]
+                    ), 
 
-                    dcc.Graph(
-                        id='graph',
-                        figure=fig
-                    ) 
+                    html.Div(
+                        id="graphDiv",
+                        children=[
+                            dcc.Graph(
+                                id='graph',
+                            figure=fig
+                            ) 
+                        ]
+                    )
                 
                 ]
             )
@@ -313,6 +339,14 @@ app.layout = html.Div([
         },
 
         children=[
+            # Color palette bar
+            html.Div(
+                id="paletteDiv",
+                # Show palette of first image
+                children=createPaletteDivs(0, imageList[0].colors)
+            ), 
+
+            # Image display 
             html.Div(
                 className = "colContent",
     
@@ -325,7 +359,7 @@ app.layout = html.Div([
                         id="imgCaption"
                     )
                 ]
-            )
+            ),
         ]
     )
 ])
@@ -353,6 +387,16 @@ def updateImgBackground(hoverData, clickData):
     return {
         'background-color': mainColor
     }
+
+# Update paletteDiv colors
+@app.callback(dash.dependencies.Output('paletteDiv', 'children'), # CHANGE THIS
+              [dash.dependencies.Input('graph', 'hoverData'),
+              dash.dependencies.Input('graph', 'clickData')])
+def updatePaletteDiv(hoverData, clickData):
+    index = hoverData['points'][0]['curveNumber']
+    image = imageList[index]
+    colors = image.colors
+    return createPaletteDivs(index, colors)
 
 if __name__ == '__main__':
     app.run_server()  
