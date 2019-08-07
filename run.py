@@ -345,10 +345,9 @@ app.layout = html.Div([
 ###################### GRAPH INTERACTION
 # Update image
 @app.callback(dash.dependencies.Output('imgDisplay', 'src'), # CHANGE THIS
-              [dash.dependencies.Input('graph', 'hoverData'),
-              dash.dependencies.Input('graph', 'clickData')])
-def updateImg(hoverData, clickData):
-    index = hoverData['points'][0]['curveNumber']
+              [dash.dependencies.Input('graph', 'clickData')])
+def updateImg(clickData):
+    index = clickData['points'][0]['curveNumber']
     image = imageList[index]
     filepath = image.filepath
     print(filepath)
@@ -356,10 +355,9 @@ def updateImg(hoverData, clickData):
 
 # Update background color
 @app.callback(dash.dependencies.Output('col2', 'style'), # CHANGE THIS
-              [dash.dependencies.Input('graph', 'hoverData'),
-              dash.dependencies.Input('graph', 'clickData')])
-def updateImgBackground(hoverData, clickData):
-    index = hoverData['points'][0]['curveNumber']
+              [dash.dependencies.Input('graph', 'clickData')])
+def updateImgBackground(clickData):
+    index = clickData['points'][0]['curveNumber']
     image = imageList[index]
     mainColor = image.colors[0]
     return {
@@ -368,10 +366,9 @@ def updateImgBackground(hoverData, clickData):
 
 # Update paletteDiv colors
 @app.callback(dash.dependencies.Output('paletteDiv', 'children'), # CHANGE THIS
-              [dash.dependencies.Input('graph', 'hoverData'),
-              dash.dependencies.Input('graph', 'clickData')])
-def updatePaletteDiv(hoverData, clickData):
-    index = hoverData['points'][0]['curveNumber']
+              [dash.dependencies.Input('graph', 'clickData')])
+def updatePaletteDiv(clickData):
+    index = clickData['points'][0]['curveNumber']
     image = imageList[index]
     colors = image.colors
     return createPaletteDivs(index, colors)
