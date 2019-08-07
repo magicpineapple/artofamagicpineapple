@@ -1,8 +1,7 @@
 /* Variables */
 :root {
-    --portraitGraphColHeight: 33%;
-    --portraitPaletteDivHeight: 60px;
-    --portraitGraphWidth: 300px;
+    --portraitGraphColHeight: 50%;
+    --portraitPaletteDivHeight: 40px;;
 }
 
 /* If screen portrait, stack divs vertically */
@@ -15,36 +14,33 @@
         width: 100% !important;
         height: var(--portraitGraphColHeight);
         background-color: white;
-        text-align: left;
     }
 
     #col2 {
         width: 100% !important;
-        top: var(--graphColWidth);
+        top: var(--portraitGraphColHeight);
         left: 0 !important;
         height: calc(100% - var(--portraitGraphColHeight));
         background-color: #f4f4f4;
     }
 
     #col1 div div {
-        display: table-row;
     }
 
     #col1Header {
+        
     }
 
     #col1Header h1, h2{
-        width: calc(100% - var(--portraitGraphWidth));
     }
 
     /* GRAPH */
-
-    .svg-container {
-        width: var(--portraitGraphWidth) !important;
+    #graph{
     }
 
-    #graphDiv{
-        margin-left: calc(100% - var(--portraitGraphWidth));
+    /* COLOR PALETTE */
+    #paletteDiv{
+        height: var(--portraitPaletteDivHeight);
     }
 
     /* FONTS */

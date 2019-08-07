@@ -133,32 +133,51 @@ def createPaletteDivs(index, colorsList):
         divs.append(colorDiv)
     return divs
 
+# FUNCTION: make image smaller so ML faster
+def calculate_new_size(image):
+    if image.width >= image.height:
+        wpercent = (WIDTH / float(image.width))
+        hsize = int((float(image.height) * float(wpercent)))
+        new_width, new_height = WIDTH, hsize
+    else:
+        hpercent = (HEIGHT / float(image.height))
+        wsize = int((float(image.width) * float(hpercent)))
+        new_width, new_height = wsize, HEIGHT
+    return new_width, new_height
+
+# FUNCTION: print imageLis (for testing)
+def printImageList(imageList):
+    for image in imageList:
+        print(image.index)
+        print(image.filepath)
+        print(image.name)
+        print(image.colors)
+        print(image.hue)
+        print(image.hueScore)
+        print(image.width)
+        print(image.height)
+        print()
+
+# FUNCTION: return image by matching curve number to imageList
+def getImageOnClick(clickData):
+    index = int(clickData['points'][0]['curveNumber'])
+    image = imageList[index]
+    return image
+
+####################################### Run code
+
 # Assign index var to each image, use to match Dash block to image
 index = -1
 
 # Loop through all images
 for filepath in glob.iglob(imgDirectory+'*' + imgType):
-    # Importatn variables
+    # Important variables
     WIDTH = 128
     HEIGHT = 128
     index = index + 1
-    # Number colors to extract (CHANGE)
-    CLUSTERS = numColors
 
     # Open image with Pillow, use orig PATH var
     image = Image.open(filepath)
-
-    # FUNCTION: make image smaller so ML faster
-    def calculate_new_size(image):
-        if image.width >= image.height:
-            wpercent = (WIDTH / float(image.width))
-            hsize = int((float(image.height) * float(wpercent)))
-            new_width, new_height = WIDTH, hsize
-        else:
-            hpercent = (HEIGHT / float(image.height))
-            wsize = int((float(image.width) * float(hpercent)))
-            new_width, new_height = wsize, HEIGHT
-        return new_width, new_height
 
     calculate_new_size(image)
     new_width, new_height = calculate_new_size(image)
@@ -170,7 +189,7 @@ for filepath in glob.iglob(imgDirectory+'*' + imgType):
     img_vector = img_array.reshape((img_array.shape[0] * img_array.shape[1], 3))
 
     # Create and train ML model
-    model = KMeans(n_clusters=CLUSTERS)
+    model = KMeans(n_clusters=numColors)
     labels = model.fit_predict(img_vector)
     label_counts = Counter(labels)
     total_count = sum(label_counts.values())
@@ -180,38 +199,15 @@ for filepath in glob.iglob(imgDirectory+'*' + imgType):
         rgb2hex(center) for center in model.cluster_centers_
     ]
 
-    list(zip(hex_colors, list(label_counts.values())))
-
     rgb_color = model.cluster_centers_[0]
     hue = getHue(rgb_color)
     hueScore = getHueScore(hue)
+    newFilepath = getNewFilepath(filepath)
+    imgName = getImgName(getNewFilepath(filepath))
 
     # Create image object, add to list
-    tempImageObject = ImageObject(index, getNewFilepath(filepath), getImgName(getNewFilepath(filepath)), hex_colors, hue, hueScore, new_width, new_height)
+    tempImageObject = ImageObject(index, newFilepath, imgName, hex_colors, hue, hueScore, new_width, new_height)
     imageList.append(tempImageObject)
-
-    # Visualize results
-    # plt.figure(figsize=(14, 8))
-    # plt.subplot(221)
-    # plt.imshow(image)
-    # plt.axis('off')
-
-    # plt.subplot(222)
-    # plt.pie(label_counts.values(), labels=hex_colors, colors=[color / 255 for color in model.cluster_centers_], startangle=90)
-    # plt.axis('equal')
-    # plt.show()
-
-""" # Print imageList
-for image in imageList:
-    print(image.index)
-    print(image.filepath)
-    print(image.name)
-    print(image.colors)
-    print(image.hue)
-    print(image.hueScore)
-    print(image.width)
-    print(image.height)
-    print() """
 
 ################################################ CREATE GRAPH
 
@@ -290,7 +286,7 @@ app.layout = html.Div([
                         children=[
                             html.H1('colors of a magic pineapple'),
                     
-                            html.H2('hover over graph to explore art | color palettes extracted and visualized with python machine learning and plotly'),
+                            html.H2('click the colored tiles to explore art | color palettes extracted and visualized with python machine learning and plotly'),
                         ]
                     ), 
 
@@ -299,7 +295,7 @@ app.layout = html.Div([
                         children=[
                             dcc.Graph(
                                 id='graph',
-                            figure=fig
+                                figure=fig
                             ) 
                         ]
                     )
@@ -347,8 +343,7 @@ app.layout = html.Div([
 @app.callback(dash.dependencies.Output('imgDisplay', 'src'), # CHANGE THIS
               [dash.dependencies.Input('graph', 'clickData')])
 def updateImg(clickData):
-    index = clickData['points'][0]['curveNumber']
-    image = imageList[index]
+    image = getImageOnClick(clickData)
     filepath = image.filepath
     print(filepath)
     return filepath
@@ -357,8 +352,7 @@ def updateImg(clickData):
 @app.callback(dash.dependencies.Output('col2', 'style'), # CHANGE THIS
               [dash.dependencies.Input('graph', 'clickData')])
 def updateImgBackground(clickData):
-    index = clickData['points'][0]['curveNumber']
-    image = imageList[index]
+    image = getImageOnClick(clickData)
     mainColor = image.colors[0]
     return {
         'background-color': mainColor
@@ -368,8 +362,7 @@ def updateImgBackground(clickData):
 @app.callback(dash.dependencies.Output('paletteDiv', 'children'), # CHANGE THIS
               [dash.dependencies.Input('graph', 'clickData')])
 def updatePaletteDiv(clickData):
-    index = clickData['points'][0]['curveNumber']
-    image = imageList[index]
+    image = getImageOnClick(clickData)
     colors = image.colors
     return createPaletteDivs(index, colors)
 

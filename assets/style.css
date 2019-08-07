@@ -47,7 +47,6 @@
     position: absolute;
     width: 100%;
     height: var(--paletteDivHeight);
-    background-color: rgb(7, 202, 202);
 }
 
 /* Color div styling in run.py */ 
