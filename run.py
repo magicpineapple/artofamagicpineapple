@@ -244,7 +244,8 @@ fig.update_layout(
 fig.update_xaxes(
     dtick=barWidth, 
     showticklabels=False, 
-    gridcolor="white"
+    gridcolor="white",
+    tick0 = 0
 )
 
 fig.update_yaxes(
@@ -286,7 +287,7 @@ app.layout = html.Div([
                         children=[
                             html.H1('colors of a magic pineapple'),
                     
-                            html.H2('click the colored tiles to explore art | color palettes extracted and visualized with python machine learning and plotly'),
+                            html.H2('click on colored tiles to explore art | best works on desktop | color palettes extracted with python machine learning'),
                         ]
                     ), 
 

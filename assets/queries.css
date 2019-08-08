@@ -32,6 +32,8 @@
     }
 
     #col1Header h1, h2{
+        width: 50%;
+        display: inline;
     }
 
     /* GRAPH */
@@ -45,14 +47,14 @@
 
     /* FONTS */
     h1{
-        font-size: 2.5em;
+        font-size: 4em !important;
     }
 
     h2{
-        font-size: 1em;
+        font-size: 2em !important;
     }
 
     h3{
-        font-size: 1.8em;
+        font-size: 1.8em !important;
     }
 }
