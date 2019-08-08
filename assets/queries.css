@@ -27,16 +27,6 @@
         background-color: #f4f4f4;
     }
 
-    #col1 div div {}
-
-    #col1Header {}
-
-    #col1Header h1,
-    h2 {}
-
-    /* GRAPH */
-    #graph {}
-
     /* COLOR PALETTE */
     #paletteDiv {
         height: var(--paletteDivHeight);

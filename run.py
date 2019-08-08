@@ -62,7 +62,6 @@ def hex2rgb(hex):
 # FUNCTION: get value from rgb array
 def getLightness(rgb):
     hls = colorsys.rgb_to_hls(rgb[0], rgb[1], rgb[2])
-    print("HLS: " + str(hls[0]) + " " + str(hls[1]) + " " + str(hls[2]))
     # Just need lightness
     return hls[1]
 
@@ -146,9 +145,7 @@ def getImgName(filepath):
 def getFontColor(backgroundColor):
     rgbArray = hex2rgb(backgroundColor)
     l = getLightness(rgbArray)
-    print("COLORS: " + backgroundColor + " " + str(l))
     if l >= 0.5: # Light background color
-        print("Dark font color for " + backgroundColor)
         return darkFontColor
     else: # Dark background
         return lightFontColor
@@ -324,14 +321,19 @@ fig.update_layout(
         title=go.layout.xaxis.Title(
             text="VISIBLE SPECTRUM HUES",
             font=dict(
-                family="Arial",
+                family="Montserrat",
                 size=18,
-                # color="#a4a4a4"
+                color="#a4a4a4"
             )
         ),
         tickmode = 'array',
         tickvals = sizeArray, # red = 1...
-        ticktext = getTicktextArray(size)
+        ticktext = getTicktextArray(size),
+        tickfont = dict(
+            family='Montserrat', 
+            color='#a4a4a4', 
+            size=12
+        )
     )
 )
 
@@ -411,20 +413,12 @@ app.layout = html.Div([
 ])
 
 ###################### GRAPH INTERACTION
-# Update image
+# Update image, palette, caption
 @app.callback(dash.dependencies.Output('col2', 'children'), # CHANGE THIS
               [dash.dependencies.Input('graph', 'clickData')])
 def updateCol2Content(clickData):
     image = getImageOnClick(clickData)
     return createCol2Content(image)
-
-""" @app.callback(dash.dependencies.Output('imgDisplay', 'src'), # CHANGE THIS
-              [dash.dependencies.Input('graph', 'clickData')])
-def updateImg(clickData):
-    image = getImageOnClick(clickData)
-    filepath = image.filepath
-    print(filepath)
-    return filepath """
 
 # Update background color
 @app.callback(dash.dependencies.Output('col2', 'style'), # CHANGE THIS
@@ -435,14 +429,6 @@ def updateImgBackground(clickData):
     return {
         'background-color': mainColor
     } 
-
-""" # Update paletteDiv colors
-@app.callback(dash.dependencies.Output('paletteDiv', 'children'), # CHANGE THIS
-              [dash.dependencies.Input('graph', 'clickData')])
-def updatePaletteDiv(clickData):
-    image = getImageOnClick(clickData)
-    colors = image.colors
-    return createPaletteDivs(colors) """
 
 if __name__ == '__main__':
     app.run_server()  

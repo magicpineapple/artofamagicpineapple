@@ -39,15 +39,13 @@
     margin-bottom: var(--bottomMargin);
 }
 
-#graph {}
-
 #imgDisplay {
     max-height: 100%;
     max-width: 100%; 
     margin: auto;
 }
 
-/* Colors Bar */
+/* Palette Bar */
 #paletteDiv{
     position: absolute;
     width: 100%;
@@ -57,7 +55,8 @@
 #paletteDiv div h3{
     margin: auto;
 }
-/* Color div styling in run.py */ 
+
+/* More palette color div styling in run.py */ 
 
 /* Fonts */
 h1 {
