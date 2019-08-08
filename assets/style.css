@@ -17,7 +17,7 @@
 
 .colContent {
     margin: var(--colPadding);
-    height: calc(100% - 2 * var(--colPadding) - var(--paletteDivHeight) - var(--bottomMargin));
+    height: calc(100% - (2 * var(--colPadding)) - var(--paletteDivHeight) - var(--bottomMargin));
 }
 
 #col1 {
