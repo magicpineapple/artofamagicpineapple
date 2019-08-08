@@ -4,8 +4,9 @@
     /* Variables */
     :root {
         --portraitGraphColHeight: 40%;
-        --paletteDivHeight: 40px !important;
+        --paletteDivHeight: 70px !important;
         --colPadding: 30px !important;
+        --bottomMargin: 30px !important;
     }
 
     .col {
@@ -22,7 +23,7 @@
         width: 100% !important;
         top: var(--portraitGraphColHeight);
         left: 0 !important;
-        height: calc(100% - var(--portraitGraphColHeight));
+        height: calc(100% - var(--portraitGraphColHeight) - var(--bottomMargin));
         background-color: #f4f4f4;
     }
 

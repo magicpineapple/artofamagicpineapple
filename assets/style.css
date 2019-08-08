@@ -3,7 +3,8 @@
     --graphColWidth: 33%;
     --colPadding: 50px;
     --generalTextColor: #a4a4a4;
-    --paletteDivHeight: 60px;
+    --paletteDivHeight: 100px;
+    --bottomMargin: 50px;
 }
 
 /* General */
@@ -16,7 +17,7 @@
 
 .colContent {
     margin: var(--colPadding);
-    height: calc(100% - 2 * var(--colPadding) - var(--paletteDivHeight));
+    height: calc(100% - 2 * var(--colPadding) - var(--paletteDivHeight) - var(--bottomMargin));
 }
 
 #col1 {
@@ -34,6 +35,10 @@
     margin-top: calc(var(--colPadding) + var(--paletteDivHeight));
 }
 
+#col2 .colContent h3{
+    margin-bottom: var(--bottomMargin);
+}
+
 #graph {}
 
 #imgDisplay {
@@ -49,6 +54,9 @@
     height: var(--paletteDivHeight);
 }
 
+#paletteDiv div h3{
+    margin: auto;
+}
 /* Color div styling in run.py */ 
 
 /* Fonts */
@@ -67,7 +75,6 @@ h2 {
 
 h3 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1em;
+    font-size: 0.9em;
     font-weight: lighter;
-    color: var(--generalTextColor);
 }

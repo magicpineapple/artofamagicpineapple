@@ -26,12 +26,15 @@ imageList = []
 # Number of graph cols to display (CHANGE)
 size = 10
 # Num colors to display (CHANGE)
-numColors = 5
+numColors = 4
 # Display bar width
-barWidth=1
+barWidth = 1
 # Image director path
 imgDirectory = 'assets/images/'
 imgType = '.jpg'
+# Font colors
+lightFontColor = '#ffffff'
+darkFontColor = '#000000'
 
 # CLASS: images
 class ImageObject:
@@ -45,20 +48,33 @@ class ImageObject:
     self.width = width
     self.height = height
 
-# FUNCTION: rgb to hex
+# FUNCTION: rgb array to hex string
 def rgb2hex(rgb):
     hex = "#{:02x}{:02x}{:02x}".format(int(rgb[0]), int(rgb[1]), int(rgb[2]))
     return hex
 
-# FUNCTION: get hue from hex color
+# FUNCTION: hex string to rgb array
+def hex2rgb(hex):
+    value = hex.lstrip('#')
+    lv = len(value)
+    return tuple(int(value[i:i + lv // 3], 16) / 255 for i in range(0, lv, lv // 3))
+
+# FUNCTION: get value from rgb array
+def getLightness(rgb):
+    hls = colorsys.rgb_to_hls(rgb[0], rgb[1], rgb[2])
+    print("HLS: " + str(hls[0]) + " " + str(hls[1]) + " " + str(hls[2]))
+    # Just need lightness
+    return hls[1]
+
+# FUNCTION: get hue from rgb array
 def getHue(rgb):
     hsv = colorsys.rgb_to_hsv(rgb[0], rgb[1], rgb[2])
-    # Just need hue value
+    # Just need hue 
     return hsv[0]
 
 # FUNCTION: get hue score using size var
 def getHueScore(hue):
-    hueScore = math.ceil(hue*size)
+    hueScore = math.ceil(hue*size) # Min score is 1, max is size
     return hueScore
 
 # FUNCTION: prep all images objects for grpah
@@ -98,6 +114,14 @@ def getScaledSize(width, height, barWidth):
 def getNewFilepath(oldfilepath):
     return oldfilepath.replace("\\", "/")
 
+# FUNCTION: return true if word does not need capitalized first letter
+def keepLowercase(word):
+    lowercaseList = ["a", "the", "for", "with", "from", "an"]
+    for lowercaseWord in lowercaseList:
+        if lowercaseWord == word:
+            return True
+    return False
+
 # FUNCTION: generate string name from filepath
 def getImgName(filepath):
     # Remove director path
@@ -106,29 +130,47 @@ def getImgName(filepath):
     name = name.replace(imgType, "")
     # Replace - with " "
     name = name.replace("-", " ")
-    # Capitalize first letters
-    nameList = list(name)
-    for i in range(len(nameList)):
-        if i == 0:
-            letter = nameList[i].capitalize()
-            nameList[i] = letter
-        elif nameList[i - 1] == " ": # Space before letter
-            letter = nameList[i].capitalize()
-            nameList[i] = letter
-    return "".join(nameList)
+    # Convert to list
+    wordsList = name.split()
+    # Capitalize first letters except for articles, short words
+    for i in range(len(wordsList)):
+        if (i == 0) or (keepLowercase(wordsList[i]) == False):
+            lettersList = list(wordsList[i])
+            capitalLetter = lettersList[0].capitalize()
+            lettersList[0] = capitalLetter
+            newWord = "".join(lettersList)
+            wordsList[i] = newWord
+    return " ".join(wordsList)
 
+# FUNCTION: get font color by color background
+def getFontColor(backgroundColor):
+    rgbArray = hex2rgb(backgroundColor)
+    l = getLightness(rgbArray)
+    print("COLORS: " + backgroundColor + " " + str(l))
+    if l >= 0.5: # Light background color
+        print("Dark font color for " + backgroundColor)
+        return darkFontColor
+    else: # Dark background
+        return lightFontColor
 
 # FUNCTION: create Dash div array for palette 
-def createPaletteDivs(index, colorsList):
+def createPaletteDivs(colorsList):
     divs = []
     for i in range(len(colorsList)):
         colorDiv = html.Div(
+            className = "colorDiv",
             style = {
                 'background-color' : colorsList[i], 
+                'color' : getFontColor(colorsList[i]),
                 'width' : 'calc(100% / ' + str(len(colorsList)) + ')',
                 'height' : '100%',
-                'display' : 'inline-flex'
-            }   
+                'display' : 'inline-flex',
+                'text-align': 'center'
+            },
+
+            children = [
+                html.H3(colorsList[i])
+            ]   
         )
         divs.append(colorDiv)
     return divs
@@ -163,6 +205,44 @@ def getImageOnClick(clickData):
     index = int(clickData['points'][0]['curveNumber'])
     image = imageList[index]
     return image
+
+# FUNCTION: return image and caption for col2Content div
+def createCol2Content(image):
+    col2Content = [
+        # Color palette bar
+        html.Div(
+            id="paletteDiv",
+            # Show palette of first image
+            children=createPaletteDivs(image.colors)
+        ), 
+        # Image display 
+        html.Div(
+            className = "colContent",
+            style = {
+                'color' : getFontColor(image.colors[0])
+            },
+            children=[
+                html.Img(
+                    id="imgDisplay",
+                    src=image.filepath
+                ),
+                       html.H3(image.name)       
+            ]
+        )
+    ]
+    return col2Content
+
+# FUNCTION: return ticktext array by size
+def getTicktextArray(size):
+    ticktextArray = []
+    for i in range(size):
+        if i == 0:
+            ticktextArray.append('RED')
+        elif i == (size - 1):
+            ticktextArray.append('VIOLET')
+        else:
+            ticktextArray.append('')
+    return ticktextArray
 
 ####################################### Run code
 
@@ -211,7 +291,7 @@ for filepath in glob.iglob(imgDirectory+'*' + imgType):
 
 ################################################ CREATE GRAPH
 
-# Array size based on size var
+# Array size based on size var 
 sizeArray = []
 for i in range(size):
     sizeArray.append(i+1)
@@ -238,14 +318,27 @@ fig.update_layout(
     yaxis = dict(
       scaleanchor = "x",
       scaleratio = 1,
+    ),
+    # Label x axis
+    xaxis=go.layout.XAxis(
+        title=go.layout.xaxis.Title(
+            text="VISIBLE SPECTRUM HUES",
+            font=dict(
+                family="Arial",
+                size=18,
+                # color="#a4a4a4"
+            )
+        ),
+        tickmode = 'array',
+        tickvals = sizeArray, # red = 1...
+        ticktext = getTicktextArray(size)
     )
 )
 
 fig.update_xaxes(
     dtick=barWidth, 
-    showticklabels=False, 
     gridcolor="white",
-    tick0 = 0
+    tick0 = 0,
 )
 
 fig.update_yaxes(
@@ -287,7 +380,7 @@ app.layout = html.Div([
                         children=[
                             html.H1('colors of a magic pineapple'),
                     
-                            html.H2('click on colored tiles to explore art | best works on desktop | color palettes extracted with python machine learning'),
+                            html.H2('click on colored tiles to explore art | works best on desktop | color palettes extracted with python machine learning'),
                         ]
                     ), 
 
@@ -313,41 +406,25 @@ app.layout = html.Div([
             'background-color' : imageList[0].colors[0]
         },
 
-        children=[
-            # Color palette bar
-            html.Div(
-                id="paletteDiv",
-                # Show palette of first image
-                children=createPaletteDivs(0, imageList[0].colors)
-            ), 
-
-            # Image display 
-            html.Div(
-                className = "colContent",
-    
-                children=[
-                    html.Img(
-                        id="imgDisplay",
-                        src=imageList[0].filepath
-                    ),
-                    html.H3(
-                        id="imgCaption"
-                    )
-                ]
-            ),
-        ]
+        children=createCol2Content(imageList[0])
     )
 ])
 
 ###################### GRAPH INTERACTION
 # Update image
-@app.callback(dash.dependencies.Output('imgDisplay', 'src'), # CHANGE THIS
+@app.callback(dash.dependencies.Output('col2', 'children'), # CHANGE THIS
+              [dash.dependencies.Input('graph', 'clickData')])
+def updateCol2Content(clickData):
+    image = getImageOnClick(clickData)
+    return createCol2Content(image)
+
+""" @app.callback(dash.dependencies.Output('imgDisplay', 'src'), # CHANGE THIS
               [dash.dependencies.Input('graph', 'clickData')])
 def updateImg(clickData):
     image = getImageOnClick(clickData)
     filepath = image.filepath
     print(filepath)
-    return filepath
+    return filepath """
 
 # Update background color
 @app.callback(dash.dependencies.Output('col2', 'style'), # CHANGE THIS
@@ -357,15 +434,15 @@ def updateImgBackground(clickData):
     mainColor = image.colors[0]
     return {
         'background-color': mainColor
-    }
+    } 
 
-# Update paletteDiv colors
+""" # Update paletteDiv colors
 @app.callback(dash.dependencies.Output('paletteDiv', 'children'), # CHANGE THIS
               [dash.dependencies.Input('graph', 'clickData')])
 def updatePaletteDiv(clickData):
     image = getImageOnClick(clickData)
     colors = image.colors
-    return createPaletteDivs(index, colors)
+    return createPaletteDivs(colors) """
 
 if __name__ == '__main__':
     app.run_server()  
