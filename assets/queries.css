@@ -1,11 +1,13 @@
-/* Variables */
-:root {
-    --portraitGraphColHeight: 50%;
-    --portraitPaletteDivHeight: 40px;;
-}
-
 /* If screen portrait, stack divs vertically */
 @media screen and (orientation:portrait) {
+
+    /* Variables */
+    :root {
+        --portraitGraphColHeight: 40%;
+        --paletteDivHeight: 40px !important;
+        --colPadding: 30px !important;
+    }
+
     .col {
         display: block !important;
     }
@@ -24,37 +26,31 @@
         background-color: #f4f4f4;
     }
 
-    #col1 div div {
-    }
+    #col1 div div {}
 
-    #col1Header {
-        
-    }
+    #col1Header {}
 
-    #col1Header h1, h2{
-        width: 50%;
-        display: inline;
-    }
+    #col1Header h1,
+    h2 {}
 
     /* GRAPH */
-    #graph{
-    }
+    #graph {}
 
     /* COLOR PALETTE */
-    #paletteDiv{
-        height: var(--portraitPaletteDivHeight);
+    #paletteDiv {
+        height: var(--paletteDivHeight);
     }
 
     /* FONTS */
-    h1{
-        font-size: 4em !important;
+    h1 {
+        font-size: 4.2em !important;
     }
 
-    h2{
-        font-size: 2em !important;
+    h2 {
+        font-size: 2.2em !important;
     }
 
-    h3{
+    h3 {
         font-size: 1.8em !important;
     }
 }
