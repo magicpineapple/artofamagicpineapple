@@ -23,7 +23,7 @@
         width: 100% !important;
         top: var(--portraitGraphColHeight);
         left: 0 !important;
-        height: calc(100% - var(--portraitGraphColHeight) - var(--bottomMargin));
+        height: calc(120% - var(--portraitGraphColHeight) - var(--bottomMargin));
         background-color: #f4f4f4;
     }
 
