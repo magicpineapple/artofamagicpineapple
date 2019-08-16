@@ -300,7 +300,7 @@ fig = go.Figure(
 )
 
 fig.update_layout(
-    height = 300,
+    height = 380,
     showlegend = False,
     barmode='stack', 
     bargap = 0, 
@@ -329,10 +329,11 @@ fig.update_layout(
         tickmode = 'array',
         tickvals = sizeArray, # red = 1...
         ticktext = getTicktextArray(size),
+        tickangle = 0,
         tickfont = dict(
             family='Montserrat', 
             color='#a4a4a4', 
-            size=12
+            size=14
         )
     )
 )
@@ -382,7 +383,7 @@ app.layout = html.Div([
                         children=[
                             html.H1('colors of a magic pineapple'),
                     
-                            html.H2('click on colored tiles to explore art | works best on desktop | color palettes extracted with python machine learning'),
+                            html.H2('click on colored tiles to explore art | works best on desktop | built with python machine learning and plotly'),
                         ]
                     ), 
 
@@ -391,7 +392,10 @@ app.layout = html.Div([
                         children=[
                             dcc.Graph(
                                 id='graph',
-                                figure=fig
+                                figure=fig,
+                                config={
+                                    'displayModeBar': False
+                                }
                             ) 
                         ]
                     )
