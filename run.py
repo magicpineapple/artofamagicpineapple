@@ -381,7 +381,7 @@ app.layout = html.Div([
                     html.Div(
                         id="col1Header",
                         children=[
-                            html.H1('colors of a magic pineapple'),
+                            html.H1('color hue histogram'),
                     
                             html.H2('click on colored tiles to explore art | works best on desktop | built with python machine learning and plotly'),
                         ]
