@@ -184,7 +184,7 @@ def calculate_new_size(image):
         new_width, new_height = wsize, HEIGHT
     return new_width, new_height
 
-# FUNCTION: print imageLis (for testing)
+# FUNCTION: print imageList (for testing)
 def printImageList(imageList):
     for image in imageList:
         print(image.index)
@@ -381,7 +381,7 @@ app.layout = html.Div([
                     html.Div(
                         id="col1Header",
                         children=[
-                            html.H1('color hue histogram'),
+                            html.H1('my art in colors'),
                     
                             html.H2('click on colored tiles to explore art | works best on desktop | built with python machine learning and plotly'),
                         ]
